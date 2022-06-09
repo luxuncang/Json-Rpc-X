@@ -314,7 +314,7 @@ All RPC bulk calls that are notifications:
 <-- //Nothing is returned for all notification batches
 ```
 
-## 扩展
+## Extend
 
 Method names starting with RPC are reserved as system extensions and must not be used elsewhere. Each system extension shall have relevant specification documents, and all system extensions shall be optional.
 
