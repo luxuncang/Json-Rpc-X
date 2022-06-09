@@ -324,4 +324,4 @@ This document and translations of it may be used to implement JSON-RPC, it may b
 
 ---
 
-The text on this page allows you to [CC-BY-SA-3](http://zh.wikipedia.org/wiki/Wikipedia:CC-BY-SA-3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC)和[GNU Free Document license](http://zh.wikipedia.org/wiki/Wikipedia:GNU%E8%87%AA%E7%94%B1%E6%96%87%E6%A1%A3%E8%AE%B8%E5%8F%AF%E8%AF%81%E6%96%87%E6%9C%AC)下修改和再使用
+The text on this page allows you to [CC-BY-SA-3](http://zh.wikipedia.org/wiki/Wikipedia:CC-BY-SA-3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC)and[GNU Free Document license](http://zh.wikipedia.org/wiki/Wikipedia:GNU%E8%87%AA%E7%94%B1%E6%96%87%E6%A1%A3%E8%AE%B8%E5%8F%AF%E8%AF%81%E6%96%87%E6%9C%AC)modify and reuse.
