@@ -28,7 +28,7 @@ One implementation of the specification is that it can easily fill these two rol
 
 ## Compatibility
 
-`The request object and response object of `JSON-RPC X` may not work completely on the existing `json-rpc 1.0` and `json-rpc 1.0` client or server. However, we can easily distinguish "X" among the three versions, and there will always be a member named 'jsonrpc' with a value of 'x'. Most x implementations should consider trying to handle `1.0` and `2.0` objects. Even if they are not peer-to-peer, they should also be prompted.
+The request object and response object of `JSON-RPC X` may not work completely on the existing `json-rpc 1.0` and `json-rpc 1.0` client or server. However, we can easily distinguish "X" among the three versions, and there will always be a member named 'jsonrpc' with a value of `"x"`. Most x implementations should consider trying to handle `1.0` and `2.0` objects. Even if they are not peer-to-peer, they should also be prompted.
 
 ## Request object
 
