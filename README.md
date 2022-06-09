@@ -16,7 +16,7 @@ A new specification developed to implement method nesting of remote procedure ca
 
 Keywords in document `"MUST"`、`"MUST NOT"`、`"REQUIRED"`、`"SHALL"`、`"SHALL NOT"`、`"SHOULD"`、`"SHOULD NOT"`、`"RECOMMENDED"`、`"MAY"` and `"OPTIONAL"` in [RFC 2119](http://www.ietf.org/rfc/rfc2119.txt) get detailed explanation and description in.
 
-Because `JSON RPC` uses `JSON`, it has the same type system as `JSON` (see[http://www.json.org](http://www.json.org/) or [RFC 4627](http://www.ietf.org/rfc/rfc4627.txt))。`JSON` can represent four basic types(`String`、`Numbers`、`Booleans` and `Null`)and two structured types(Objects和Arrays)。In the specification, terms `"Primitive"` Mark the 4 original types，`"Structured"`Two structural types are marked. Whenever a document involves JSON data types, the first letter must be capitalized：`Object`，`Array`，`String`，`Number`，`Boolean`，`Null`.Include `True` and `False`.
+Because `JSON RPC` uses `JSON`, it has the same type system as `JSON` (see[http://www.json.org](http://www.json.org/) or [RFC 4627](http://www.ietf.org/rfc/rfc4627.txt))。`JSON` can represent four basic types(`String`、`Numbers`、`Booleans` and `Null`)and two structured types(Objects和Arrays)。In the specification, terms `"Primitive"` Mark the 4 original types，`"Structured"`Two structural types are marked. Whenever a document involves JSON data types, the first letter must be capitalized：`Object`，`Array`，`String`，`Number`，`Boolean`，`Null`.Include True and False.
 
 All member names exchanged between the client and any matched server should be case sensitive. Functions, methods, and procedures can be considered interchangeable.
 
