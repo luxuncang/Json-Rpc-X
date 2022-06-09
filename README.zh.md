@@ -308,8 +308,8 @@ rpc批量调用:
 
 ```python
 --> [
-    {"jsonrpc": "X", "method": ["notify_sum"], "params": [1,2,4]},
-    {"jsonrpc": "X", "method": ["notify_hello"], "params": [7]}
+    {"jsonrpc": "X", "method": ["notify_sum"], "params": [[1,2,4]]},
+    {"jsonrpc": "X", "method": ["notify_hello"], "params": [[7]]}
 ]
 
 <-- //Nothing is returned for all notification batches
