@@ -10,7 +10,7 @@ A new specification developed to implement method nesting of remote procedure ca
 
 ## Summary
 
-`Json-rpc x` is a stateless and lightweight remote procedure call (RPC) protocol. This specification mainly defines some data structures and related processing rules. It allows to run in the same process based on socket, HTTP and many other different message transmission environments. It is an extension of `json-rpc 2.0`, including nested calls and object instantiation.
+`Json-rpc x` is a stateless and lightweight remote procedure call (RPC) protocol. This specification mainly defines some data structures and related processing rules. It allows to run in the same process based on socket, HTTP and many other different message transmission environments. It is an extension of `json-rpc 2.0`, including nested calls, object instantiation, and bidirectional calls.
 
 ## Appointment
 
@@ -25,6 +25,8 @@ The client is defined as the source of the request object and the handler of the
 The server is defined as the origin of the response object and the handler of the request object.
 
 One implementation of the specification is that it can easily fill these two roles, even at the same time, the same client or other different clients. This specification does not cover complex layers.
+
+When the client and server establish contact, they are customer service and server.
 
 ## Compatibility
 
@@ -144,8 +146,8 @@ If the RPC operation called in batch is not a valid JSON or an array containing 
 Syntax:
 
 ```
---> data sent to Server
-<-- data sent to Client
+--> data sent to Server/Client
+<-- data sent to Client/Server
 ```
 
 RPC call with indexed array parameters:
