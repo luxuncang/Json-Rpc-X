@@ -43,10 +43,7 @@ Sending a request object to the server represents an RPC call. A request object 
 **method**
 
 > The string list `list[str]` containing the name of the method to be called. The method name starting with RPC and connected with English period (u+002e or ASCII 46) are the method name and extension reserved for RPC, and cannot be used elsewhere.
-
-**params**
-
-> The list of structural parameter values required for calling the method `list[none | list | dict]`. The member parameters can be `none`, `{}`, `[]`. When the value is' list 'or' dict ', the object is' callable'. When the value is `None`, the opposite is true.
+The list `list[str | tuple[args, kwargs]]` containing the name of the method to be called and its required parameters. The method name starting with RPC and connected with English period (u+002e or ASCII 46) are the method name and extension reserved for RPC, and cannot be used elsewhere. The member parameters can be `str`, `[[], {}]`. When the value is `List`, it means that the object is `Callable`. When the value is `str`, it is the opposite.
 
 **id**
 
@@ -157,11 +154,11 @@ def subtract(minuend, subtrahend):
     return minuend - subtrahend
 
 subtract(42, 23)
---> {"jsonrpc": "X", "method": ["subtract"], "params": [[42, 23]], "id": 1}
+--> {"jsonrpc": "X", "method": ["subtract", [[42, 23],{}]],"id": 1}
 <-- {"jsonrpc": "X", "result": 19, "id": 1}
 
 subtract(23, 42)
---> {"jsonrpc": "X", "method": ["subtract"], "params": [[23, 42]], "id": 2}
+--> {"jsonrpc": "X", "method": ["subtract", [[23, 42],{}]],  "id": 2}
 <-- {"jsonrpc": "X", "result": -19, "id": 2}
 ```
 
@@ -172,11 +169,11 @@ def subtract(minuend, subtrahend):
     return minuend - subtrahend
 
 subtract(subtrahend = 23, minuend = 42)
---> {"jsonrpc": "X", "method": ["subtract"], "params": [{"subtrahend": 23, "minuend": 42}], "id": 3}
+--> {"jsonrpc": "X", "method": ["subtract", [[],{"subtrahend": 23, "minuend": 42}]], "id": 3}
 <-- {"jsonrpc": "X", "result": 19, "id": 3}
 
 subtract(minuend = 42, subtrahend = 23)
---> {"jsonrpc": "X", "method": ["subtract"], "params": {["minuend": 42, "subtrahend"]: 23}, "id": 4}
+--> {"jsonrpc": "X", "method": ["subtract",[[],{"minuend": 42, "subtrahend": 23}]], "id": 4}
 <-- {"jsonrpc": "X", "result": 19, "id": 4}
 ```
 
@@ -190,11 +187,11 @@ class Math:
         return minuend - subtrahend
 
 Math.subtract(23, 42)
---> {"jsonrpc": "X", "method": ["subtract", "add"], "params": [null, [23, 42]], "id": 5}
+--> {"jsonrpc": "X", "method": ["Math", "subtract", [[23, 42], {}]], "id": 5}
 <-- {"jsonrpc": "X", "result": -19, "id": 5}
 
 Math.subtract(minuend = 23, subtrahend = 42)
---> {"jsonrpc": "X", "method": ["subtract", "add"], "params": [null, {"minuend": 23, "subtrahend": 42}], "id": 6}
+--> {"jsonrpc": "X", "method": ["subtract", "add", ["Math", "subtract", [[], {"minuend": 23, "subtrahend": 42}]]], "id": 6}
 <-- {"jsonrpc": "X", "result": -19, "id": 6}
 ```
 
@@ -216,14 +213,14 @@ class Math:
 
 
 Math(10).add(20).subtract(30).minuend
---> {"jsonrpc": "X", "method": ["Math", "add", "subtract", "minuend"], "params": [10, [20], [30], null], "id": 5}
+--> {"jsonrpc": "X", "method": ["Math", [[10], {}],"add",[[20],{}], "subtract", [[30],{}], "minuend"], "id": 5}
 <-- {"jsonrpc": "X", "result": 0, "id": 5}
 ```
 
 Notice:
 
 ```python
---> {"jsonrpc": "X", "method": ["update"], "params": [1,2,3,4,5]}
+--> {"jsonrpc": "X", "method": ["update", [[1,2,3,4,5],{}]]}
 --> {"jsonrpc": "X", "method": ["foobar"]}
 ```
 
@@ -233,6 +230,7 @@ RPC call without calling method:
 --> {"jsonrpc": "X", "method": ["foobar"], "id": "1"}
 <-- {"jsonrpc": "X", "error": {"code": -32601, "message": "Method not found"}, "id": "1"}
 ```
+
 
 RPC call with invalid JSON:
 
@@ -289,11 +287,11 @@ RPC batch call:
 
 ```python
 --> [
-    {"jsonrpc": "X", "method": ["sum"], "params": [[1,2,4]], "id": "1"},
-    {"jsonrpc": "X", "method": ["notify_hello"], "params": [[7]]},
-    {"jsonrpc": "X", "method": ["subtract"], "params": [[42,23]], "id": "2"},
+    {"jsonrpc": "X", "method": ["sum", [[1,2,4],{}]], "id": "1"},
+    {"jsonrpc": "X", "method": ["notify_hello", [[7],{}]]},
+    {"jsonrpc": "X", "method": ["subtract", [[42,23], {}]], "id": "2"},
     {"foo": "boo"},
-    {"jsonrpc": "X", "method": ["foo", "get"], "params": [null, {"name": "myself"}], "id": "5"},
+    {"jsonrpc": "X", "method": ["foo", "get", [[{"name": "myself"}],{}]], "id": "5"},
     {"jsonrpc": "X", "method": ["get_data"], "id": "9"}
     ]
 <-- [
@@ -309,8 +307,8 @@ All RPC bulk calls that are notifications:
 
 ```python
 --> [
-    {"jsonrpc": "X", "method": ["notify_sum"], "params": [[1,2,4]]},
-    {"jsonrpc": "X", "method": ["notify_hello"], "params": [[7]]}
+    {"jsonrpc": "X", "method": ["notify_sum", [[1,2,4],{}]]},
+    {"jsonrpc": "X", "method": ["notify_hello", [[7],{}]], "params": }
 ]
 
 <-- //Nothing is returned for all notification batches

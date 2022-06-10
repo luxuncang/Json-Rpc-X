@@ -38,15 +38,11 @@
 
 **jsonrpc**
 
-> 指定JSON-RPC协议版本的字符串，必须准确写为“X”
+> 指定JSON-RPC协议版本的字符串，必须准确写为 `"X"`
 
 **method**
 
-> 包含所要调用方法名称的字符串列表 `List[str]`，其中以rpc开头的方法名，用英文句号（U+002E or ASCII 46）连接的为预留给rpc内部的方法名及扩展名，且不能在其他地方使用。
-
-**params**
-
-> 调用方法所需要的结构化参数值的列表 `List[None | List | Dict]`，该成员参数可以为 `None`, `{}`, `[]`。当值为 `List` 或 `Dict` 时，表示对象是 `Callable`,而当值为 `None` 时恰好相反。
+> 包含所要调用方法名称及其所需参数的列表 `List[str | Tuple[args, kwargs]]`，其中以rpc开头的方法名，用英文句号（U+002E or ASCII 46）连接的为预留给rpc内部的方法名及扩展名，且不能在其他地方使用。该成员参数可以为 `str`, `[[],{}]`。当值为 `List` 时，表示对象是 `Callable`, 而当值为 `str` 时恰好相反。
 
 **id**
 
@@ -73,7 +69,7 @@ rpc调用如果存在参数则必须为基本类型或结构化类型的参数�
 
 **jsonrpc**
 
-> 指定JSON-RPC协议版本的字符串，必须准确写为“X”
+> 指定JSON-RPC协议版本的字符串，必须准确写为 `"X"`
 
 **result**
 
@@ -158,11 +154,11 @@ def subtract(minuend, subtrahend):
     return minuend - subtrahend
 
 subtract(42, 23)
---> {"jsonrpc": "X", "method": ["subtract"], "params": [[42, 23]], "id": 1}
+--> {"jsonrpc": "X", "method": ["subtract", [[42, 23],{}]],"id": 1}
 <-- {"jsonrpc": "X", "result": 19, "id": 1}
 
 subtract(23, 42)
---> {"jsonrpc": "X", "method": ["subtract"], "params": [[23, 42]], "id": 2}
+--> {"jsonrpc": "X", "method": ["subtract", [[23, 42],{}]],  "id": 2}
 <-- {"jsonrpc": "X", "result": -19, "id": 2}
 ```
 
@@ -173,11 +169,11 @@ def subtract(minuend, subtrahend):
     return minuend - subtrahend
 
 subtract(subtrahend = 23, minuend = 42)
---> {"jsonrpc": "X", "method": ["subtract"], "params": [{"subtrahend": 23, "minuend": 42}], "id": 3}
+--> {"jsonrpc": "X", "method": ["subtract", [[],{"subtrahend": 23, "minuend": 42}]], "id": 3}
 <-- {"jsonrpc": "X", "result": 19, "id": 3}
 
 subtract(minuend = 42, subtrahend = 23)
---> {"jsonrpc": "X", "method": ["subtract"], "params": {["minuend": 42, "subtrahend"]: 23}, "id": 4}
+--> {"jsonrpc": "X", "method": ["subtract",[[],{"minuend": 42, "subtrahend": 23}]], "id": 4}
 <-- {"jsonrpc": "X", "result": 19, "id": 4}
 ```
 
@@ -191,11 +187,11 @@ class Math:
         return minuend - subtrahend
 
 Math.subtract(23, 42)
---> {"jsonrpc": "X", "method": ["subtract", "add"], "params": [null, [23, 42]], "id": 5}
+--> {"jsonrpc": "X", "method": ["Math", "subtract", [[23, 42], {}]], "id": 5}
 <-- {"jsonrpc": "X", "result": -19, "id": 5}
 
 Math.subtract(minuend = 23, subtrahend = 42)
---> {"jsonrpc": "X", "method": ["subtract", "add"], "params": [null, {"minuend": 23, "subtrahend": 42}], "id": 6}
+--> {"jsonrpc": "X", "method": ["subtract", "add", ["Math", "subtract", [[], {"minuend": 23, "subtrahend": 42}]]], "id": 6}
 <-- {"jsonrpc": "X", "result": -19, "id": 6}
 ```
 
@@ -217,14 +213,14 @@ class Math:
 
 
 Math(10).add(20).subtract(30).minuend
---> {"jsonrpc": "X", "method": ["Math", "add", "subtract", "minuend"], "params": [10, [20], [30], null], "id": 5}
+--> {"jsonrpc": "X", "method": ["Math", [[10], {}],"add",[[20],{}], "subtract", [[30],{}], "minuend"], "id": 5}
 <-- {"jsonrpc": "X", "result": 0, "id": 5}
 ```
 
 通知:
 
 ```python
---> {"jsonrpc": "X", "method": ["update"], "params": [1,2,3,4,5]}
+--> {"jsonrpc": "X", "method": ["update", [[1,2,3,4,5],{}]]}
 --> {"jsonrpc": "X", "method": ["foobar"]}
 ```
 
@@ -290,11 +286,11 @@ rpc批量调用:
 
 ```python
 --> [
-    {"jsonrpc": "X", "method": ["sum"], "params": [[1,2,4]], "id": "1"},
-    {"jsonrpc": "X", "method": ["notify_hello"], "params": [[7]]},
-    {"jsonrpc": "X", "method": ["subtract"], "params": [[42,23]], "id": "2"},
+    {"jsonrpc": "X", "method": ["sum", [[1,2,4],{}]], "id": "1"},
+    {"jsonrpc": "X", "method": ["notify_hello", [[7],{}]]},
+    {"jsonrpc": "X", "method": ["subtract", [[42,23], {}]], "id": "2"},
     {"foo": "boo"},
-    {"jsonrpc": "X", "method": ["foo", "get"], "params": [null, {"name": "myself"}], "id": "5"},
+    {"jsonrpc": "X", "method": ["foo", "get", [[{"name": "myself"}],{}]], "id": "5"},
     {"jsonrpc": "X", "method": ["get_data"], "id": "9"}
     ]
 <-- [
@@ -310,8 +306,8 @@ rpc批量调用:
 
 ```python
 --> [
-    {"jsonrpc": "X", "method": ["notify_sum"], "params": [[1,2,4]]},
-    {"jsonrpc": "X", "method": ["notify_hello"], "params": [[7]]}
+    {"jsonrpc": "X", "method": ["notify_sum", [[1,2,4],{}]]},
+    {"jsonrpc": "X", "method": ["notify_hello", [[7],{}]], "params": }
 ]
 
 <-- //Nothing is returned for all notification batches
